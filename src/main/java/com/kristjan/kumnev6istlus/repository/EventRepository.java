@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-    @Query("SELECT eventId FROM Event")
+    @Query("select eventId from Event e")
     List<Long> findEventIds();
 
 }

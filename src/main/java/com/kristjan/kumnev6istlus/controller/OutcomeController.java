@@ -3,6 +3,7 @@ package com.kristjan.kumnev6istlus.controller;
 import com.kristjan.kumnev6istlus.entity.Athlete;
 import com.kristjan.kumnev6istlus.entity.Outcome;
 import com.kristjan.kumnev6istlus.repository.AthleteRepository;
+import com.kristjan.kumnev6istlus.repository.EventRepository;
 import com.kristjan.kumnev6istlus.repository.OutcomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,8 @@ public class OutcomeController {
     OutcomeRepository outcomeRepository;
     @Autowired
     AthleteRepository athleteRepository;
+    @Autowired
+    EventRepository eventRepository;
 
     @GetMapping("outcomes")
     public List<Outcome> getOutcome() {
@@ -25,17 +28,11 @@ public class OutcomeController {
 
     @PostMapping("add-outcome")
     public List<Outcome> addOutcome(@RequestBody Outcome outcome) {
-//        if (outcomeRepository.findAthleteIds().contains(outcome.getAthleteId()) &&
-//            outcomeRepository.findEventIds().contains(outcome.getEventId())) {
-//            throw new RuntimeException("This athlete and event pair is already filled");
-//        }
-        outcomeRepository.save(outcome);
-        return outcomeRepository.findAll();
-    }
-
-    @PostMapping("add-outcome/{athleteId}/{eventId}/{outcomeNumber}")
-    public List<Outcome> addOutcomeByIds(@PathVariable Long athleteId, @PathVariable Long eventId, @PathVariable float outcomeNumber) {
-        Outcome outcome = new Outcome(athleteId, eventId, outcomeNumber);
+        if (outcomeRepository.findByEventIdAndAthleteId(outcome.getEventId(), outcome.getAthleteId()) != null) {
+            throw new RuntimeException("This athlete and event pair is already added");
+        } if (!eventRepository.findEventIds().contains(outcome.getEventId())) {
+            throw new RuntimeException("The provided eventId doesn't exist.");
+        }
         outcomeRepository.save(outcome);
         return outcomeRepository.findAll();
     }
@@ -45,7 +42,6 @@ public class OutcomeController {
         List<Float> outcomes = new ArrayList<>();
         for (long i = 1; i < 11; i++) {
             try {
-//                float outcome = outcomeRepository.getOutcome((long) i, athleteId);
                 Outcome outcomeObject = outcomeRepository.findByEventIdAndAthleteId(i, athleteId);
                 float outcome = outcomeObject.getOutcome();
                 System.out.println("event" + i + " outcome is: " + outcome);

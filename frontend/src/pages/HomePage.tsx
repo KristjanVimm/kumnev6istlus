@@ -10,12 +10,6 @@ function HomePage() {
     const [activePage, setActivePage] = useState(1);
     const size = 3;
 
-    // useEffect(() => {
-    //     fetch("http://localhost:8080/athletes")
-    //     .then(res => res.json())
-    //     .then(json => setAthletes(json));
-    // }, []);
-
     useEffect(() => {
         fetch(`http://localhost:8080/public-athletes?size=${size}&page=${activePage-1}`)
         .then(res => res.json())

@@ -9,31 +9,31 @@ function AddAthlete() {
 
     function addAthlete () {
     
-        if (inputRefAthleteName.current === null || inputRefAthleteCountry.current === null || inputRefAthleteAge.current === null) {
-         console.log("Mingi REF jäi HTMLi lisamata.")
-         return ;
-       }
-    
-        fetch("http://localhost:8080/athletes", {
-          method: "POST",
-          headers: {
-            "Content-Type": "Application/JSON",
-          },
-          body: JSON.stringify({
-            "name": inputRefAthleteName.current.value,
-            "country": inputRefAthleteCountry.current.value,
-            "age": inputRefAthleteAge.current.value,
-          })
+      if (inputRefAthleteName.current === null || inputRefAthleteCountry.current === null || inputRefAthleteAge.current === null) {
+        console.log("Mingi REF jäi HTMLi lisamata.")
+        return ;
+      }
+  
+      fetch("http://localhost:8080/athletes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "Application/JSON",
+        },
+        body: JSON.stringify({
+          "name": inputRefAthleteName.current.value,
+          "country": inputRefAthleteCountry.current.value,
+          "age": inputRefAthleteAge.current.value,
         })
-          .then((respose) => respose.json())
-          .then(json => {
-            if (json.timestamp && json.status && json.error) {
-            toast.error(json.error);
-            } else {
-            toast.success("Edukalt lisatud")
-            }
-        });
-      };
+      })
+        .then((respose) => respose.json())
+        .then(json => {
+          if (json.timestamp && json.status && json.error) {
+          toast.error(json.error);
+          } else {
+          toast.success("Edukalt lisatud")
+          }
+      });
+    };
 
   return (
     <div>
